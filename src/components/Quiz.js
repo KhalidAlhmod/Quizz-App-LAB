@@ -64,6 +64,7 @@ function Quiz() {
     const [answers, setAnswers] = useState(Array(questions.length).fill(null));
     const [showResult, setShowResult] = useState(false);
     const [score, setScore] = useState(0);
+    
 
     const handleAnswerOptionClick = (questionIndex, isCorrect) => {
         const newAnswers = [...answers];
@@ -77,12 +78,36 @@ function Quiz() {
         setShowResult(true);
     };
 
+    // Calculate progress
+    const answeredQuestions = answers.filter((answer) => answer !== null).length;
+    const totalQuestions = questions.length;
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    };
+
+
     return (
         <div className="quiz">
             {showResult ? (
                 <Result score={score} totalQuestions={questions.length} />
             ) : (
                 <div>
+                    {/* Progress Bar or Counter */}
+                    <div className="progress-bar-container">
+                        <div className="progress-bar">
+                            <div
+                                className="progress"
+                                style={{
+                                    width: `${(answeredQuestions / totalQuestions) * 100}%`,
+                                }}
+                            ></div>
+                        </div>
+                        <p className="progress-text">
+                            {answeredQuestions} / {totalQuestions} Questions Answered
+                        </p>
+                    </div>
                     {questions.map((question, index) => (
                         <Question
                             key={index}
